@@ -5,9 +5,9 @@ import Link from "next/link";
 import { easeOutExpo } from "@/lib/motion";
 
 const links = [
-  { href: "#work", label: "Work" },
-  { href: "#about", label: "About" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#work", label: "Work" },
+  { href: "/#about", label: "About" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export function SiteHeader() {
@@ -30,7 +30,7 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-xl px-3 py-1.5 text-sm text-muted transition-colors hover:bg-white/35 hover:text-foreground"
+              className="rounded-xl px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-black/[0.06] hover:text-foreground"
             >
               {item.label}
             </Link>

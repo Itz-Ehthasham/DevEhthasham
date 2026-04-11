@@ -37,7 +37,7 @@ export function ProjectVideoCard({
 
   return (
     <motion.article
-      className={`relative isolate min-h-[220px] overflow-hidden rounded-[1.35rem] border border-white/10 bg-white/[0.04] shadow-[0_20px_50px_rgba(0,0,0,0.35)] backdrop-blur-[2px] md:min-h-[280px] ${className}`}
+      className={`relative isolate min-h-[220px] overflow-hidden rounded-[1.35rem] border border-border bg-card shadow-[0_12px_40px_rgba(0,0,0,0.06)] md:min-h-[280px] ${className}`}
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
@@ -65,25 +65,25 @@ export function ProjectVideoCard({
         </video>
       ) : (
         <div
-          className="absolute inset-0 bg-gradient-to-br from-[#2a4a3c] via-[#1e2e28] to-[#152018]"
+          className="absolute inset-0 bg-gradient-to-br from-muted/60 via-background to-accent/15"
           aria-hidden
         />
       )}
       <div
-        className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/10"
+        className="absolute inset-0 bg-gradient-to-t from-background from-[28%] via-background/35 to-transparent"
         aria-hidden
       />
       <div className="absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] flex-wrap gap-1.5 sm:left-4 sm:top-4 sm:gap-2">
         {tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[0.7rem] font-medium text-white backdrop-blur-md sm:text-xs"
+            className="rounded-full border border-border bg-card/95 px-2.5 py-1 text-[0.7rem] font-medium text-foreground shadow-sm backdrop-blur-sm sm:text-xs"
           >
             {tag}
           </span>
         ))}
       </div>
-      <h3 className="absolute bottom-3 left-3 right-3 text-base font-semibold leading-snug tracking-tight text-white sm:bottom-4 sm:left-4 sm:right-4 sm:text-lg md:text-xl">
+      <h3 className="absolute bottom-3 left-3 right-3 text-base font-semibold leading-snug tracking-tight text-foreground sm:bottom-4 sm:left-4 sm:right-4 sm:text-lg md:text-xl">
         {title}
       </h3>
     </motion.article>

@@ -1,7 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import Link from "next/link";
+import { useRef } from "react";
 import { BmwHoverReveal } from "@/components/bmw-hover-reveal";
+import VariableProximity from "@/components/VariableProximity";
 import { easeOutExpo } from "@/lib/motion";
 
 const container = {
@@ -21,7 +24,13 @@ const item = {
   },
 };
 
+const PROXIMITY_HEADLINE =
+  "Full Stack Engineer building scalable, high-performance web applications.";
+
 export function Hero() {
+  const proximityContainerRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+
   return (
     <section
       className="relative px-4 pb-20 pt-28 sm:px-6 sm:pb-28 sm:pt-32"
@@ -34,31 +43,85 @@ export function Hero() {
           animate="show"
           className="max-w-xl lg:max-w-none"
         >
-          <motion.h1
-            id="hero-heading"
+          <motion.p
             variants={item}
-            className="font-serif text-[1.65rem] font-normal leading-[1.35] tracking-tight text-foreground sm:text-3xl sm:leading-[1.32] md:text-[2.35rem] md:leading-[1.28]"
+            className="text-xs font-semibold uppercase tracking-[0.2em] text-accent sm:text-sm"
           >
-            Hey, I&apos;m{" "}
-            <strong className="font-semibold">Ehthasham Mustafa</strong>, a full
-            stack developer who loves to bring life to your projects.
-          </motion.h1>
+            Ehthasham Mustafa
+          </motion.p>
+
+          <motion.div variants={item} className="mt-4">
+            <div
+              ref={proximityContainerRef}
+              className="relative w-full max-w-3xl"
+              style={{ position: "relative" }}
+            >
+              <h1
+                id="hero-heading"
+                className="m-0 text-[1.65rem] font-normal leading-[1.15] tracking-tight text-foreground sm:text-3xl sm:leading-[1.12] md:text-4xl md:leading-[1.1] lg:text-[2.75rem]"
+              >
+                <VariableProximity
+                  label={PROXIMITY_HEADLINE}
+                  className="block w-full leading-[1.15] tracking-tight text-foreground"
+                  fromFontVariationSettings="'wght' 400, 'opsz' 8"
+                  toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                  containerRef={proximityContainerRef}
+                  radius={100}
+                  falloff="linear"
+                />
+              </h1>
+            </div>
+          </motion.div>
+
+          <motion.p
+            variants={item}
+            className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg"
+          >
+            Frontend:{" "}
+            <span className="text-foreground/90">
+              React, component-driven UIs, and polished product interfaces.
+            </span>{" "}
+            Backend:{" "}
+            <span className="text-foreground/90">
+              REST and GraphQL APIs, databases, and pragmatic system design.
+            </span>{" "}
+            I optimize for{" "}
+            <span className="font-medium text-foreground">
+              performance, reliability, and clean, maintainable code
+            </span>{" "}
+            from first render to production traffic.
+          </motion.p>
+
           <motion.div
             variants={item}
-            className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm font-medium"
+            className="mt-10 flex flex-wrap items-center gap-3 sm:gap-4"
           >
-            <a
-              href="#work"
-              className="border-b border-foreground/25 pb-0.5 text-foreground transition-colors hover:border-accent hover:text-accent"
+            <motion.div
+              whileHover={reduceMotion ? undefined : { scale: 1.03, y: -1 }}
+              whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 420, damping: 25 }}
+              className="inline-flex"
             >
-              View work
-            </a>
-            <a
-              href="#contact"
-              className="border-b border-foreground/25 pb-0.5 text-foreground transition-colors hover:border-accent hover:text-accent"
+              <Link
+                href="/#work"
+                className="inline-flex items-center justify-center rounded-full bg-accent px-7 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-accent-hover hover:text-primary-foreground sm:text-base"
+              >
+                View Projects
+              </Link>
+            </motion.div>
+            <motion.div
+              whileHover={reduceMotion ? undefined : { scale: 1.03, y: -1 }}
+              whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 420, damping: 25 }}
+              className="inline-flex"
             >
-              Get in touch
-            </a>
+              <Link
+                href="/#contact"
+                className="inline-flex items-center justify-center rounded-full border-2 border-border bg-card px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:border-accent hover:text-accent sm:text-base"
+              >
+                Contact
+              </Link>
+            </motion.div>
           </motion.div>
         </motion.div>
 

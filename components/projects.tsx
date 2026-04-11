@@ -32,7 +32,7 @@ export function Projects() {
   return (
     <section
       id="work"
-      className="scroll-mt-24 bg-work-bg px-4 py-20 text-work-text sm:px-6 sm:py-28"
+      className="scroll-mt-24 border-t border-border bg-background px-4 py-20 text-foreground sm:px-6 sm:py-28"
       aria-labelledby="work-heading"
     >
       <div className="mx-auto max-w-7xl">
@@ -46,11 +46,11 @@ export function Projects() {
           >
             <h2
               id="work-heading"
-              className="text-3xl font-semibold tracking-tight text-work-text sm:text-4xl"
+              className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
             >
               Selected work
             </h2>
-            <p className="mt-3 text-base leading-relaxed text-work-muted sm:text-lg">
+            <p className="mt-3 text-base leading-relaxed text-muted-foreground sm:text-lg">
               A collection of recent projects focusing on performance,
               interaction, and scalable architecture.
             </p>
@@ -64,7 +64,7 @@ export function Projects() {
           >
             <Link
               href="/archive"
-              className="inline-flex items-center gap-2 text-sm font-medium text-work-text transition-opacity hover:opacity-80"
+              className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-accent"
             >
               View all archive
               <ArchiveArrow />
