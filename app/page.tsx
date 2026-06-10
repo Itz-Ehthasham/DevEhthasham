@@ -1,21 +1,17 @@
-import { About } from "@/components/about";
-import { Contact } from "@/components/contact";
-import { Hero } from "@/components/hero";
-import { Projects } from "@/components/projects";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
+import { CanvasProvider } from '@/components/providers/CanvasProvider';
+import { HeroOverlay } from '@/components/ui/HeroOverlay';
 
 export default function Home() {
   return (
     <>
-      <SiteHeader />
-      <main>
-        <Hero />
-        <Projects />
-        <About />
-        <Contact />
+      <CanvasProvider />
+      <HeroOverlay />
+      <main className="relative z-20 min-h-screen">
+        <section id="about" className="min-h-screen" />
+        <section id="skills" className="min-h-screen" />
+        <section id="projects" className="min-h-screen" />
+        <section id="contact" className="min-h-screen" />
       </main>
-      <SiteFooter />
     </>
   );
 }

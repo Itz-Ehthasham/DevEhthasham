@@ -1,36 +1,34 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Lora, Roboto_Flex } from "next/font/google";
+import { Space_Grotesk, JetBrains_Mono, Rajdhani } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const robotoFlex = Roboto_Flex({
-  variable: "--font-proximity",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space",
   subsets: ["latin"],
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const lora = Lora({
-  variable: "--font-lora",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
+
+const rajdhani = Rajdhani({
+  variable: "--font-rajdhani",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Ehthasham Mustafa",
-    template: "%s · Ehthasham Mustafa",
+    default: "EHTHASHAM MUSTAFA — FULL STACK ENGINEER",
+    template: "%s | EHTHASHAM MUSTAFA",
   },
-  description:
-    "Full stack developer — portfolio, projects, and contact.",
+  description: "Full Stack Engineer specializing in React, Three.js, and high-performance web systems.",
 };
 
 export default function RootLayout({
@@ -41,9 +39,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${lora.variable} ${robotoFlex.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${rajdhani.variable} h-full antialiased`}
+      style={{ scrollBehavior: 'smooth' }}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-[#03050a] text-white overflow-x-hidden">
+        {children}
+      </body>
     </html>
   );
 }
