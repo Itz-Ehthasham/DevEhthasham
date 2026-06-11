@@ -9,44 +9,67 @@ import { usePortfolioStore } from '@/store/usePortfolioStore';
 const BREATHING_FRAGMENT = `
 uniform float uTime;
 uniform float uIntensity;
+
 varying vec3 vNormal;
 varying vec3 vWorldPosition;
 
-#include <common>
-#include <packing>
-#include <uv_pars_fragment>
-#include <map_pars_fragment>
-#include <normalmap_pars_fragment>
-#include <roughnessmap_pars_fragment>
-#include <metalnessmap_pars_fragment>
-#include <emissivemap_pars_fragment>
-#include <lights_pars_begin>
-#include <lights_physical_pars_fragment>
-#include <shadowmap_pars_fragment>
+float hash(vec3 p) {
+  p = fract(p * 0.3183099 + 0.1);
+  p *= 17.0;
+  return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
+}
+
+float noise3d(vec3 p) {
+  vec3 i = floor(p);
+  vec3 f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  return mix(
+    mix(
+      mix(hash(i + vec3(0,0,0)), hash(i + vec3(1,0,0)), f.x),
+      mix(hash(i + vec3(0,1,0)), hash(i + vec3(1,1,0)), f.x),
+      f.y
+    ),
+    mix(
+      mix(hash(i + vec3(0,0,1)), hash(i + vec3(1,0,1)), f.x),
+      mix(hash(i + vec3(0,1,1)), hash(i + vec3(1,1,1)), f.x),
+      f.y
+    ),
+    f.z
+  );
+}
 
 void main() {
-  #include <clipping_planes_fragment>
+  vec3 normal = normalize(vNormal);
+  vec3 worldPos = vWorldPosition;
   
-  vec3 diffuseColor = vec3(0.05, 0.08, 0.15);
+  vec3 viewDir = normalize(cameraPosition - worldPos);
+  
+  vec3 baseColor = vec3(0.05, 0.08, 0.15);
+  vec3 accentColor = vec3(0.0, 0.3, 0.25);
   vec3 emissiveColor = vec3(0.0, 0.05, 0.1);
   
-  #include <normal_fragment_begin>
-  #include <normal_fragment_maps>
-  #include <emissivemap_fragment>
+  float ndotv = max(dot(normal, viewDir), 0.0);
   
-  vec3 totalEmissiveRadiance = emissiveColor;
+  vec3 sunDir = normalize(vec3(0.5, 0.8, 0.3));
+  float ndotl = max(dot(normal, sunDir), 0.0);
   
-  #include <lights_physical_fragment>
-  #include <lights_fragment_begin>
-  #include <lights_fragment_maps>
-  #include <lights_fragment_end>
+  vec3 diffuse = baseColor * ndotl * 2.0;
+  vec3 specular = vec3(0.3) * pow(max(dot(reflect(-sunDir, normal), viewDir), 0.0), 32.0) * ndotl;
   
-  vec3 outgoingLight = totalEmissiveRadiance + totalDiffuse + totalSpecular;
+  float rim = pow(1.0 - ndotv, 3.0);
+  vec3 rimColor = accentColor * rim * 0.5;
   
-  #include <tonemapping_fragment>
-  #include <encodings_fragment>
-  #include <fog_fragment>
-  #include <premultiplied_alpha_fragment>
+  float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.0);
+  vec3 scanline = vec3(0.02) * sin(worldPos.y * 20.0 + uTime * 5.0) * fresnel;
+  
+  vec3 outgoingLight = emissiveColor + diffuse + specular + rimColor + scanline;
+  
+  float fogFactor = smoothstep(100.0, 3000.0, length(worldPos));
+  vec3 fogColor = vec3(0.01, 0.02, 0.04);
+  outgoingLight = mix(outgoingLight, fogColor, fogFactor);
+  
+  float gamma = 2.2;
+  outgoingLight = pow(outgoingLight, vec3(1.0 / gamma));
   
   gl_FragColor = vec4(outgoingLight, 1.0);
 }
@@ -162,7 +185,7 @@ export function Character() {
         uTime: { value: 0 },
         uIntensity: { value: performanceMode === 'low' ? 0 : 1 },
       },
-      lights: true,
+      lights: false,
     });
     
     body.material = breathMat;

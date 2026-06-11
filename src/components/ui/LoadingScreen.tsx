@@ -5,17 +5,25 @@ import { useEffect } from 'react';
 import { usePortfolioStore } from '@/store/usePortfolioStore';
 
 export function LoadingScreen() {
-  const { loadingProgress, setLoading } = usePortfolioStore();
+  const { setLoading } = usePortfolioStore();
   const progress = useMotionValue(0);
   const springProgress = useSpring(progress, { stiffness: 100, damping: 15 });
 
   useEffect(() => {
-    progress.set(loadingProgress);
-    if (loadingProgress >= 1) {
-      const timer = setTimeout(() => setLoading(false), 500);
-      return () => clearTimeout(timer);
-    }
-  }, [loadingProgress, setLoading]);
+    let frame = 0;
+    const animate = () => {
+      frame++;
+      const p = Math.min(frame / 120, 1);
+      progress.set(p);
+      if (p < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        const timer = setTimeout(() => setLoading(false), 300);
+        return () => clearTimeout(timer);
+      }
+    };
+    requestAnimationFrame(animate);
+  }, [progress, setLoading]);
 
   return (
     <div className="fixed inset-0 z-50 bg-[#03050a] flex items-center justify-center">
@@ -36,11 +44,11 @@ export function LoadingScreen() {
         </div>
         
         <motion.p
-          className="font-mono text-xs text-[#1a2332] font-mono"
+          className="font-mono text-xs text-[#1a2332]"
           animate={{ opacity: [0.3, 1, 0.3] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         >
-          {Math.round(loadingProgress * 100)}%
+          {Math.round(springProgress.get() * 100)}%
         </motion.p>
         
         <div className="mt-12 flex justify-center gap-4 text-xs text-[#0a0f1a] font-mono">

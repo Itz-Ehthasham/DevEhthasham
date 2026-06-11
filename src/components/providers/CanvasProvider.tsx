@@ -23,27 +23,9 @@ function ScrollListener() {
   return null;
 }
 
-function PerformanceMonitor() {
-  const { performanceMode } = usePortfolioStore();
-  const gl = useThree((state) => state.gl);
-  
-  useEffect(() => {
-    if (performanceMode === 'low') {
-      gl.setPixelRatio(1);
-      gl.shadowMap.enabled = false;
-    } else if (performanceMode === 'medium') {
-      gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-      gl.shadowMap.enabled = true;
-    } else {
-      gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      gl.shadowMap.enabled = true;
-    }
-  }, [performanceMode, gl]);
-  
-  return null;
-}
-
 function CanvasInner() {
+  const { performanceMode } = usePortfolioStore();
+  
   return (
     <>
       <Canvas
@@ -55,6 +37,17 @@ function CanvasInner() {
           gl.toneMapping = THREE.ACESFilmicToneMapping;
           gl.toneMappingExposure = 1.0;
           gl.shadowMap.type = THREE.PCFSoftShadowMap;
+          
+          if (performanceMode === 'low') {
+            gl.setPixelRatio(1);
+            gl.shadowMap.enabled = false;
+          } else if (performanceMode === 'medium') {
+            gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+            gl.shadowMap.enabled = true;
+          } else {
+            gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            gl.shadowMap.enabled = true;
+          }
         }}
       >
         <fog attach="fog" args={['#03050a', 100, 3000]} />
@@ -64,7 +57,6 @@ function CanvasInner() {
           <CameraController />
         </Suspense>
         
-        <PerformanceMonitor />
         <ScrollListener />
         
         <EffectComposer multisampling={8} enableNormalPass={false}>
